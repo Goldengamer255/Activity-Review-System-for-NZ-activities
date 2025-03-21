@@ -26,7 +26,8 @@ public class OperatorManagementSystem {
         initials.append(word.charAt(0)); // This gets the first letter from each word
       }
     }
-
+    String abvLocation = locationFound.getLocationAbbreviation();
+    initials.append("-" + abvLocation + "-001");
     MessageCli.OPERATOR_CREATED.printMessage(
         operatorName, initials.toString(), locationAsString); // prints the output
   }
