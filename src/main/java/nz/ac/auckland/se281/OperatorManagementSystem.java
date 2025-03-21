@@ -12,10 +12,23 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
-    Location locationFound = Location.fromString(location);
-    String locationAsString = locationFound.getFullName();
+    Location locationFound =
+        Location.fromString(location); // gets the location from what the user inputted
+    String locationAsString =
+        locationFound.getFullName(); // converts whatever is obtained to full name for printing
 
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName, "SOMETHING-ELSE", locationAsString);
+    String[] words = operatorName.split(" ");
+    StringBuilder initials =
+        new StringBuilder(); // is used to concatenate the first letters of each word
+
+    for (String word : words) {
+      if (!word.isEmpty()) { // Checking the input from user to see if the word is not empty
+        initials.append(word.charAt(0)); // This gets the first letter from each word
+      }
+    }
+
+    MessageCli.OPERATOR_CREATED.printMessage(
+        operatorName, initials.toString(), locationAsString); // prints the output
   }
 
   public void viewActivities(String operatorId) {
