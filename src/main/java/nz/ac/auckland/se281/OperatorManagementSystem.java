@@ -1,5 +1,7 @@
 package nz.ac.auckland.se281;
 
+import nz.ac.auckland.se281.Types.Location;
+
 public class OperatorManagementSystem {
 
   // Do not change the parameters of the constructor
@@ -10,7 +12,10 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
-    MessageCli.OPERATOR_CREATED.printMessage(operatorName);
+    Location locationFound = Location.fromString(location);
+    String locationAsString = locationFound.getFullName();
+
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName, "SOMETHING-ELSE", locationAsString);
   }
 
   public void viewActivities(String operatorId) {
