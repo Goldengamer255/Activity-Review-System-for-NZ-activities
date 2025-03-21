@@ -10,7 +10,7 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
-    // TODO implement
+    MessageCli.OPERATOR_CREATED.printMessage(operatorName);
   }
 
   public void viewActivities(String operatorId) {
