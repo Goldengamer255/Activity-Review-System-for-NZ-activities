@@ -1,5 +1,6 @@
 package nz.ac.auckland.se281;
 
+import java.util.ArrayList;
 import nz.ac.auckland.se281.Types.Location;
 
 public class OperatorManagementSystem {
@@ -30,6 +31,8 @@ public class OperatorManagementSystem {
     initials.append("-" + abvLocation + "-001");
     MessageCli.OPERATOR_CREATED.printMessage(
         operatorName, initials.toString(), locationAsString); // prints the output
+    ArrayList<String> operatorList = new ArrayList<String>();
+    operatorList.add("* " + operatorName + initials + locationFound);
   }
 
   public void viewActivities(String operatorId) {
