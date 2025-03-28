@@ -9,6 +9,7 @@ public class OperatorManagementSystem {
   public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
+    keyword = keyword.trim().toLowerCase();
     MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
   }
 
@@ -31,8 +32,39 @@ public class OperatorManagementSystem {
     initials.append("-" + abvLocation + "-001");
     MessageCli.OPERATOR_CREATED.printMessage(
         operatorName, initials.toString(), locationAsString); // prints the output
-    ArrayList<String> operatorList = new ArrayList<String>();
-    operatorList.add("* " + operatorName + initials + locationFound);
+
+    class Operator {
+      private String star;
+      private String name;
+      private String code;
+      private String location;
+
+      public Operator(String star, String name, String code, String location) {
+        this.star = star;
+        this.name = name;
+        this.code = code;
+        this.location = location;
+      }
+
+      public String getStar() {
+        return star;
+      }
+
+      public String getName() {
+        return name;
+      }
+
+      public String getCode() {
+        return code;
+      }
+
+      public String getLocation() {
+        return location;
+      }
+    }
+
+    ArrayList<Operator> operators = new ArrayList<>();
+    operators.add(new Operator("* ", operatorName, initials.toString(), locationAsString));
   }
 
   public void viewActivities(String operatorId) {
