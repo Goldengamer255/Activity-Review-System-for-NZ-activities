@@ -84,11 +84,27 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
+    String nameCheck = "";
+    nameCheck = operatorName.replaceAll("\\s", "");
+    if (nameCheck.length() < 3) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
+      return;
+    }
 
-    Location locationFound =
-        Location.fromString(location); // gets the location from what the user inputted
-    String locationAsString =
-        locationFound.getFullName(); // converts whatever is obtained to full name for printing
+    Location locationFound;
+    String locationAsString;
+    try {
+      locationFound =
+          Location.fromString(location); // May throw IllegalArgumentException or return null
+      if (locationFound == null) { // Extra check if method returns null
+        throw new IllegalArgumentException("Invalid location: " + location);
+      }
+      locationAsString = locationFound.getFullName();
+    } catch (IllegalArgumentException e) {
+      // Handle invalid location
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
+      return; // Exit early
+    }
 
     String[] words = operatorName.split(" ");
     StringBuilder initials =
@@ -105,11 +121,11 @@ public class OperatorManagementSystem {
     String searchLocation =
         locationAsString
             .toLowerCase(); // initialising what to search for when searching for duplicate
-                            // operators
+    // operators
 
     for (Operator existing :
         operators) { // if there is already an operator with the same name in the same location the
-                     // program will exit and say operator already exists
+      // program will exit and say operator already exists
       if (existing.getName().toLowerCase().equals(searchName)
           && existing.getLocation().toLowerCase().equals(searchLocation)) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
@@ -131,14 +147,18 @@ public class OperatorManagementSystem {
         String.format(
             "%03d",
             locationCount); // adding on the code at the end depending on how many operators are
-                            // currently in that location
+    // currently in that location
     String operatorCode =
         initials.toString() + "-" + abvLocation + "-" + sequenceNumber; // adding it onto the code
 
     MessageCli.OPERATOR_CREATED.printMessage(
-        operatorName, operatorCode, locationAsString); // prints the output
+        operatorName, operatorCode.toUpperCase(), locationAsString); // prints the output
     operators.add(
-        new Operator("* ", operatorName, operatorCode, locationAsString)); // adds operator to array
+        new Operator(
+            "* ",
+            operatorName,
+            operatorCode.toUpperCase(),
+            locationAsString)); // adds operator to array
   }
 
   public void viewActivities(String operatorId) {
