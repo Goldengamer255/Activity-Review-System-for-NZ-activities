@@ -102,9 +102,14 @@ public class OperatorManagementSystem {
     String abvLocation = locationFound.getLocationAbbreviation();
 
     String searchName = operatorName.toLowerCase();
-    String searchLocation = locationAsString.toLowerCase();
+    String searchLocation =
+        locationAsString
+            .toLowerCase(); // initialising what to search for when searching for duplicate
+                            // operators
 
-    for (Operator existing : operators) {
+    for (Operator existing :
+        operators) { // if there is already an operator with the same name in the same location the
+                     // program will exit and say operator already exists
       if (existing.getName().toLowerCase().equals(searchName)
           && existing.getLocation().toLowerCase().equals(searchLocation)) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
@@ -115,13 +120,20 @@ public class OperatorManagementSystem {
 
     int locationCount = 1;
     for (Operator existing : operators) {
-      if (existing.getLocation().equalsIgnoreCase(locationAsString)) {
+      if (existing
+          .getLocation()
+          .equalsIgnoreCase(locationAsString)) { // checking to see how many people in each location
         locationCount += 1;
       }
     }
 
-    String sequenceNumber = String.format("%03d", locationCount);
-    String operatorCode = initials.toString() + "-" + abvLocation + "-" + sequenceNumber;
+    String sequenceNumber =
+        String.format(
+            "%03d",
+            locationCount); // adding on the code at the end depending on how many operators are
+                            // currently in that location
+    String operatorCode =
+        initials.toString() + "-" + abvLocation + "-" + sequenceNumber; // adding it onto the code
 
     MessageCli.OPERATOR_CREATED.printMessage(
         operatorName, operatorCode, locationAsString); // prints the output
