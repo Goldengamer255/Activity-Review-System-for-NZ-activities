@@ -5,7 +5,7 @@ import nz.ac.auckland.se281.Types.Location;
 
 public class OperatorManagementSystem {
 
-  class Operator {
+  class Operator { // defining the arraylist
     private String star;
     private String name;
     private String code;
@@ -35,20 +35,27 @@ public class OperatorManagementSystem {
     }
   }
 
-  ArrayList<Operator> operators = new ArrayList<>();
+  ArrayList<Operator> operators = new ArrayList<>(); // making the main arraylist
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
-    keyword = keyword.trim().toLowerCase();
+    keyword = keyword.trim().toLowerCase(); // trimming the keyword and making it lowercase
 
     int numOperatorsFound = 0;
-    ArrayList<Operator> foundOperators = new ArrayList<>();
+    ArrayList<Operator> foundOperators =
+        new ArrayList<>(); // making a new arraylist of operators that are found that match the
+    // keyword
 
     for (int i = 0; i < operators.size(); i++) {
       Operator current = operators.get(i);
-      if (operators.get(i).getName().toLowerCase().contains(keyword)
+      if (operators
+              .get(i)
+              .getName()
+              .toLowerCase()
+              .contains(
+                  keyword) // searching all of the ararylist for operators that match the keyword
           || operators.get(i).getCode().toLowerCase().contains(keyword)
           || operators.get(i).getLocation().toLowerCase().contains(keyword)
           || operators.get(i).getStar().toLowerCase().contains(keyword)) {
@@ -57,7 +64,11 @@ public class OperatorManagementSystem {
       }
     }
     if (numOperatorsFound > 1) {
-      MessageCli.OPERATORS_FOUND.printMessage("are", String.valueOf(numOperatorsFound), "s", ":");
+      MessageCli.OPERATORS_FOUND.printMessage(
+          "are",
+          String.valueOf(numOperatorsFound),
+          "s",
+          ":"); // printing how many operators were found
     } else if (numOperatorsFound == 1) {
       MessageCli.OPERATORS_FOUND.printMessage("is", String.valueOf(numOperatorsFound), "", ":");
     } else {
@@ -65,7 +76,10 @@ public class OperatorManagementSystem {
     }
 
     for (Operator op : foundOperators) {
-      MessageCli.OPERATOR_ENTRY.printMessage(op.getName(), op.getCode(), op.getLocation());
+      MessageCli.OPERATOR_ENTRY.printMessage(
+          op.getName(),
+          op.getCode(),
+          op.getLocation()); // printing out all the operators that were found
     }
   }
 
@@ -89,7 +103,9 @@ public class OperatorManagementSystem {
     MessageCli.OPERATOR_CREATED.printMessage(
         operatorName, initials.toString(), locationAsString); // prints the output
 
-    operators.add(new Operator("* ", operatorName, initials.toString(), locationAsString));
+    operators.add(
+        new Operator(
+            "* ", operatorName, initials.toString(), locationAsString)); // adds operator to array
   }
 
   public void viewActivities(String operatorId) {
