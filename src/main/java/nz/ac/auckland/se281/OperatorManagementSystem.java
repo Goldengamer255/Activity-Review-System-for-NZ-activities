@@ -84,6 +84,7 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
+
     Location locationFound =
         Location.fromString(location); // gets the location from what the user inputted
     String locationAsString =
@@ -102,6 +103,18 @@ public class OperatorManagementSystem {
     initials.append("-" + abvLocation + "-001");
     MessageCli.OPERATOR_CREATED.printMessage(
         operatorName, initials.toString(), locationAsString); // prints the output
+
+    String searchName = operatorName.toLowerCase();
+    String searchLocation = locationAsString.toLowerCase();
+
+    for (Operator existing : operators) {
+      if (existing.getName().toLowerCase().equals(searchName)
+          && existing.getLocation().toLowerCase().equals(searchLocation)) {
+        MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
+            operatorName, locationAsString);
+        return;
+      }
+    }
 
     operators.add(
         new Operator(
