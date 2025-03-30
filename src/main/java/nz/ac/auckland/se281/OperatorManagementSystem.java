@@ -100,9 +100,6 @@ public class OperatorManagementSystem {
       }
     }
     String abvLocation = locationFound.getLocationAbbreviation();
-    initials.append("-" + abvLocation + "-001");
-    MessageCli.OPERATOR_CREATED.printMessage(
-        operatorName, initials.toString(), locationAsString); // prints the output
 
     String searchName = operatorName.toLowerCase();
     String searchLocation = locationAsString.toLowerCase();
@@ -116,9 +113,20 @@ public class OperatorManagementSystem {
       }
     }
 
+    int locationCount = 1;
+    for (Operator existing : operators) {
+      if (existing.getLocation().equalsIgnoreCase(locationAsString)) {
+        locationCount += 1;
+      }
+    }
+
+    String sequenceNumber = String.format("%03d", locationCount);
+    String operatorCode = initials.toString() + "-" + abvLocation + "-" + sequenceNumber;
+
+    MessageCli.OPERATOR_CREATED.printMessage(
+        operatorName, operatorCode, locationAsString); // prints the output
     operators.add(
-        new Operator(
-            "* ", operatorName, initials.toString(), locationAsString)); // adds operator to array
+        new Operator("* ", operatorName, operatorCode, locationAsString)); // adds operator to array
   }
 
   public void viewActivities(String operatorId) {
