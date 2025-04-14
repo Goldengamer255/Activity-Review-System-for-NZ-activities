@@ -162,7 +162,22 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
-    // TODO implement
+    if (operatorId == null || operatorId.isEmpty()) {
+      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+    String searchId = operatorId.toLowerCase(); // making the id lowercase to search for it
+    // search for the operator in the arraylist operators using standard for loop
+    for (int i = 0; i < operators.size(); i++) {
+      Operator current = operators.get(i);
+      if (current.getCode().toLowerCase().equals(searchId)) {
+        MessageCli.ACTIVITIES_FOUND.printMessage(
+            "are", "no", "s", "."); // if no activities are found
+        return;
+      }
+    }
+    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId); // if the operator is not found
+    return;
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
