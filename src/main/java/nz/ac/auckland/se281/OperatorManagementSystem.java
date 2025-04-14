@@ -219,11 +219,23 @@ public class OperatorManagementSystem {
     String searchId = operatorId.toLowerCase();
     for (Operator current : operators) {
       if (current.getCode().toLowerCase().equals(searchId)) {
+        // Determine the activity number for this operator
+        int activityCount = current.getActivities().size() + 1;
+        String activityNumber = String.format("%03d", activityCount); // Format as three digits
+
+        // Generate the activity ID
+        String activityId = operatorId.toUpperCase() + "-" + activityNumber;
+
         // Create the activity string with the valid activity type
-        String activity = activityName + " (" + validActivityType.getName() + ")";
+        String activity =
+            activityId + ": " + activityName + " (" + validActivityType.getName() + ")";
         current.addActivity(activity); // Add activity to the operator
+
+        // Print success message
         MessageCli.ACTIVITY_CREATED.printMessage(
-            activityName, validActivityType.getName(), operatorId);
+            activityName,
+            validActivityType.getName(),
+            activityId); // add the operator name here!!!!!!!!!!!!!!!!!
         return;
       }
     }
