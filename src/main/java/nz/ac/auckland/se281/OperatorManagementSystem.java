@@ -289,7 +289,45 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
-    // TODO implement
+    if (keyword == null || keyword.trim().isEmpty()) {
+      MessageCli.ACTIVITY_NOT_FOUND.printMessage(keyword);
+      return;
+    }
+
+    keyword = keyword.trim().toLowerCase(); // Normalize the keyword for case-insensitive search
+    ArrayList<Activity> matchingActivities = new ArrayList<>();
+
+    for (Operator operator : operators) {
+      for (Activity activity : operator.getActivities()) {
+        // Check if the keyword matches activity name, type, or operator location
+        if (keyword.equals("*")
+            || activity.getActivityName().toLowerCase().contains(keyword)
+            || activity.getActivityType().getName().toLowerCase().contains(keyword)
+            || operator.getLocation().toLowerCase().contains(keyword)) {
+          matchingActivities.add(activity);
+        }
+      }
+    }
+
+    if (matchingActivities.isEmpty()) {
+      // No matching activities found
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "activities", ".");
+    } else {
+      // Print the header with the number of matching activities
+      String verb = matchingActivities.size() == 1 ? "is" : "are";
+      String singularOrPlural = matchingActivities.size() == 1 ? "y" : "ies";
+      MessageCli.ACTIVITIES_FOUND.printMessage(
+          verb, String.valueOf(matchingActivities.size()), singularOrPlural, ":");
+
+      // Print each matching activity
+      for (Activity activity : matchingActivities) {
+        MessageCli.ACTIVITY_ENTRY.printMessage(
+            activity.getActivityName(),
+            activity.getActivityId(),
+            activity.getActivityType().getName(),
+            activity.getOperatorName());
+      }
+    }
   }
 
   public void addPublicReview(String activityId, String[] options) {
