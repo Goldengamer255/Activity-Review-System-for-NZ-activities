@@ -248,9 +248,10 @@ public class OperatorManagementSystem {
       return;
     }
 
-    if (activityName.trim().length() < 3) {
-      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(
-          activityName); // Check activity name length
+    // Remove surrounding spaces and all spaces for length validation
+    String nameCheck = activityName.trim().replaceAll("\\s", "");
+    if (nameCheck.length() < 3) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(activityName);
       return;
     }
 
