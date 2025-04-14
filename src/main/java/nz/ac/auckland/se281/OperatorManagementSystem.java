@@ -10,7 +10,7 @@ public class OperatorManagementSystem {
     private String name;
     private String code;
     private String location;
-    private ArrayList<String> activities; // New field for activities
+    private ArrayList<Activity> activities; // New field for activities
 
     public Operator(String star, String name, String code, String location) {
       this.star = star;
@@ -36,11 +36,11 @@ public class OperatorManagementSystem {
       return this.star;
     }
 
-    public ArrayList<String> getActivities() {
+    public ArrayList<Activity> getActivities() {
       return this.activities;
     }
 
-    public void addActivity(String activity) {
+    public void addActivity(Activity activity) {
       this.activities.add(activity);
     }
   }
@@ -53,6 +53,40 @@ public class OperatorManagementSystem {
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
+
+  public class Activity {
+    private String activityId;
+    private String activityName;
+    private Types.ActivityType activityType;
+    private String operatorName;
+
+    public Activity(
+        String activityId,
+        String activityName,
+        Types.ActivityType activityType,
+        String operatorName) {
+      this.activityId = activityId;
+      this.activityName = activityName;
+      this.activityType = activityType;
+      this.operatorName = operatorName;
+    }
+
+    public String getActivityId() {
+      return activityId;
+    }
+
+    public String getActivityName() {
+      return activityName;
+    }
+
+    public Types.ActivityType getActivityType() {
+      return activityType;
+    }
+
+    public String getOperatorName() {
+      return operatorName;
+    }
+  }
 
   public void searchOperators(String keyword) {
     keyword = keyword.trim().toLowerCase(); // trimming the keyword and making it lowercase
@@ -184,21 +218,32 @@ public class OperatorManagementSystem {
     String searchId = operatorId.toLowerCase();
     for (Operator current : operators) {
       if (current.getCode().toLowerCase().equals(searchId)) {
-        ArrayList<String> activities = current.getActivities();
+        ArrayList<Activity> activities = current.getActivities();
         if (activities.isEmpty()) {
+          // No activities found for the operator
           MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
         } else {
+          // Print the header with the number of activities
+          String verb = activities.size() == 1 ? "is" : "are";
+          String singularOrPlural = activities.size() == 1 ? "y" : "ies";
           MessageCli.ACTIVITIES_FOUND.printMessage(
-              "are", String.valueOf(activities.size()), "ies", ":");
-          for (String activity : activities) {
-            MessageCli.ACTIVITY_ENTRY.printMessage(activity);
+              verb, String.valueOf(activities.size()), singularOrPlural, ":");
+
+          // Print each activity
+          for (Activity activity : activities) {
+            MessageCli.ACTIVITY_ENTRY.printMessage(
+                activity.getActivityName(),
+                activity.getActivityId(),
+                activity.getActivityType().getName(),
+                activity.getOperatorName());
           }
         }
         return;
       }
     }
 
-    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId); // If operator not found
+    // Operator not found
+    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
@@ -230,14 +275,10 @@ public class OperatorManagementSystem {
         String activityId = operatorId.toUpperCase() + "-" + activityNumber;
 
         // Create the activity string with the valid activity type
-        String activity =
-            activityId + ": " + activityName + " (" + validActivityType.getName() + ")";
-        current.addActivity(activity); // Add activity to the operator
+        Activity activity = new Activity(activityId, activityName, validActivityType, operatorName);
+        current.addActivity(activity);
 
-        // Print success message, including the operator's name
         MessageCli.ACTIVITY_CREATED.printMessage(
-
-            // ACTIVITY_CREATED("Successfully created activity '%s' ('%s': '%s') for '%s'."),
             activityName, activityId, validActivityType.getName(), operatorName);
         return;
       }
