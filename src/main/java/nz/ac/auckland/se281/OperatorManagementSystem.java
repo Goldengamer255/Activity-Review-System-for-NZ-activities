@@ -5,17 +5,19 @@ import nz.ac.auckland.se281.Types.Location;
 
 public class OperatorManagementSystem {
 
-  class Operator { // defining the arraylist
+  class Operator {
     private String star;
     private String name;
     private String code;
     private String location;
+    private ArrayList<String> activities; // New field for activities
 
     public Operator(String star, String name, String code, String location) {
       this.star = star;
       this.name = name;
       this.code = code;
       this.location = location;
+      this.activities = new ArrayList<>(); // Initialize activities list
     }
 
     public String getName() {
@@ -33,9 +35,21 @@ public class OperatorManagementSystem {
     public String getStar() {
       return this.star;
     }
+
+    public ArrayList<String> getActivities() {
+      return this.activities;
+    }
+
+    public void addActivity(String activity) {
+      this.activities.add(activity);
+    }
   }
 
   ArrayList<Operator> operators = new ArrayList<>(); // making the main arraylist
+
+  // make an arraylist for operators that contain their code corresponding to any activites that
+  // they have which can be added to the arraylist
+  ArrayList<String> activities = new ArrayList<>(); // making the arraylist for activities
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -166,22 +180,44 @@ public class OperatorManagementSystem {
       MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
       return;
     }
-    String searchId = operatorId.toLowerCase(); // making the id lowercase to search for it
-    // search for the operator in the arraylist operators using standard for loop
-    for (int i = 0; i < operators.size(); i++) {
-      Operator current = operators.get(i);
+
+    String searchId = operatorId.toLowerCase();
+    for (Operator current : operators) {
       if (current.getCode().toLowerCase().equals(searchId)) {
-        MessageCli.ACTIVITIES_FOUND.printMessage(
-            "are", "no", "s", "."); // if no activities are found
+        ArrayList<String> activities = current.getActivities();
+        if (activities.isEmpty()) {
+          MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+        } else {
+          MessageCli.ACTIVITIES_FOUND.printMessage(
+              "are", String.valueOf(activities.size()), "ies", ":");
+          for (String activity : activities) {
+            MessageCli.ACTIVITY_ENTRY.printMessage(activity);
+          }
+        }
         return;
       }
     }
-    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId); // if the operator is not found
-    return;
+
+    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId); // If operator not found
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
-    // TODO implement
+    if (operatorId == null || operatorId.isEmpty()) {
+      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+
+    String searchId = operatorId.toLowerCase();
+    for (Operator current : operators) {
+      if (current.getCode().toLowerCase().equals(searchId)) {
+        String activity = activityName + " (" + activityType + ")";
+        current.addActivity(activity); // Add activity to the operator
+        MessageCli.ACTIVITY_CREATED.printMessage(activityName, activityType, operatorId);
+        return;
+      }
+    }
+
+    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId); // If operator not found
   }
 
   public void searchActivities(String keyword) {
