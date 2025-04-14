@@ -203,7 +203,7 @@ public class OperatorManagementSystem {
 
   public void createActivity(String activityName, String activityType, String operatorId) {
     if (operatorId == null || operatorId.isEmpty()) { // Check if operatorId is null or empty
-      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
       return;
     }
 
@@ -213,17 +213,23 @@ public class OperatorManagementSystem {
       return;
     }
 
+    Types.ActivityType validActivityType =
+        Types.ActivityType.fromString(activityType); // Check activity type
+
     String searchId = operatorId.toLowerCase();
     for (Operator current : operators) {
       if (current.getCode().toLowerCase().equals(searchId)) {
-        String activity = activityName + " (" + activityType + ")";
+        // Create the activity string with the valid activity type
+        String activity = activityName + " (" + validActivityType.getName() + ")";
         current.addActivity(activity); // Add activity to the operator
-        MessageCli.ACTIVITY_CREATED.printMessage(activityName, activityType, operatorId);
+        MessageCli.ACTIVITY_CREATED.printMessage(
+            activityName, validActivityType.getName(), operatorId);
         return;
       }
     }
 
-    MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId); // If operator not found
+    MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(
+        operatorId); // If operator not found
   }
 
   public void searchActivities(String keyword) {
