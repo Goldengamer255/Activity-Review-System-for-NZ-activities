@@ -310,7 +310,7 @@ public class OperatorManagementSystem {
     }
 
     if (matchingActivities.isEmpty()) { // No matching activities found
-      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "activities", ".");
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
     } else {
       // Print the header with the number of matching activities
       String verb = matchingActivities.size() == 1 ? "is" : "are"; // Singular or plural verb
