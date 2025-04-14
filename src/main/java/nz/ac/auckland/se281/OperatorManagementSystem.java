@@ -289,7 +289,7 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
-    if (keyword == null || keyword.trim().isEmpty()) {
+    if (keyword == null || keyword.trim().isEmpty()) { // Check if keyword is null or empty
       MessageCli.ACTIVITY_NOT_FOUND.printMessage(keyword);
       return;
     }
@@ -300,7 +300,7 @@ public class OperatorManagementSystem {
     for (Operator operator : operators) {
       for (Activity activity : operator.getActivities()) {
         // Check if the keyword matches activity name, type, or operator location
-        if (keyword.equals("*")
+        if (keyword.equals("*") // If the keyword is "*", add all activities
             || activity.getActivityName().toLowerCase().contains(keyword)
             || activity.getActivityType().getName().toLowerCase().contains(keyword)
             || operator.getLocation().toLowerCase().contains(keyword)) {
@@ -309,19 +309,18 @@ public class OperatorManagementSystem {
       }
     }
 
-    if (matchingActivities.isEmpty()) {
-      // No matching activities found
+    if (matchingActivities.isEmpty()) { // No matching activities found
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "activities", ".");
     } else {
       // Print the header with the number of matching activities
-      String verb = matchingActivities.size() == 1 ? "is" : "are";
-      String singularOrPlural = matchingActivities.size() == 1 ? "y" : "ies";
+      String verb = matchingActivities.size() == 1 ? "is" : "are"; // Singular or plural verb
+      String singularOrPlural = matchingActivities.size() == 1 ? "y" : "ies"; // Singular or plural
       MessageCli.ACTIVITIES_FOUND.printMessage(
           verb, String.valueOf(matchingActivities.size()), singularOrPlural, ":");
 
       // Print each matching activity
-      for (Activity activity : matchingActivities) {
-        MessageCli.ACTIVITY_ENTRY.printMessage(
+      for (Activity activity : matchingActivities) { // loop through the activities
+        MessageCli.ACTIVITY_ENTRY.printMessage( // print the activity entry
             activity.getActivityName(),
             activity.getActivityId(),
             activity.getActivityType().getName(),
