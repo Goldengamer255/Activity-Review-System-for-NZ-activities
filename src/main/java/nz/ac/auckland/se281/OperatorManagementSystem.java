@@ -202,8 +202,14 @@ public class OperatorManagementSystem {
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
-    if (operatorId == null || operatorId.isEmpty()) {
+    if (operatorId == null || operatorId.isEmpty()) { // Check if operatorId is null or empty
       MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+
+    if (activityName.trim().length() < 3) {
+      MessageCli.ACTIVITY_NOT_CREATED_INVALID_ACTIVITY_NAME.printMessage(
+          activityName); // Check activity name length
       return;
     }
 
