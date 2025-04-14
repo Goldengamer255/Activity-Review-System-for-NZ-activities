@@ -45,11 +45,7 @@ public class OperatorManagementSystem {
     }
   }
 
-  ArrayList<Operator> operators = new ArrayList<>(); // making the main arraylist
-
-  // make an arraylist for operators that contain their code corresponding to any activites that
-  // they have which can be added to the arraylist
-  ArrayList<String> activities = new ArrayList<>(); // making the arraylist for activities
+  private ArrayList<Operator> operators = new ArrayList<>(); // making the main arraylist
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -151,7 +147,7 @@ public class OperatorManagementSystem {
     } catch (IllegalArgumentException e) {
       // Handle invalid location
       MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
-      return; // Exit early
+      return;
     }
 
     String[] words = operatorName.split(" ");
