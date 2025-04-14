@@ -294,13 +294,17 @@ public class OperatorManagementSystem {
     keyword = keyword.trim().toLowerCase(); // Normalize the keyword for case-insensitive search
     ArrayList<Activity> matchingActivities = new ArrayList<>();
 
+    Types.Location matchedLocation =
+        Types.Location.fromString(keyword); // Check if keyword is a location
+
     for (Operator operator : operators) {
       for (Activity activity : operator.getActivities()) {
         // Check if the keyword matches activity name, type, or operator location
         if (keyword.equals("*") // If the keyword is "*", add all activities
             || activity.getActivityName().toLowerCase().contains(keyword)
             || activity.getActivityType().getName().toLowerCase().contains(keyword)
-            || operator.getLocation().toLowerCase().contains(keyword)) {
+            || (matchedLocation != null
+                && operator.getLocation().equalsIgnoreCase(matchedLocation.getFullName()))) {
           matchingActivities.add(activity);
         }
       }
