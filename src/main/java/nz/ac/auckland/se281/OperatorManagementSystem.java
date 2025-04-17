@@ -331,8 +331,41 @@ public class OperatorManagementSystem {
   }
 
   public void addPublicReview(String activityId, String[] options) {
-    MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
-    // TODO implement
+    if (activityId == null || activityId.isEmpty()) { // Check if activityId is null or empty
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    for (int i = 0; i < operators.size(); i++) { // loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        try {
+          Types.ActivityType activityType = activity.getActivityType(); // get the activity type
+          if (activityType == null) { // check if the activity type is null
+            throw new NullPointerException("Activity type is null");
+          }
+        } catch (NullPointerException e) {
+          // Handle the case where activity type is null
+          MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
+          return;
+        }
+      }
+    }
+
+    for (int i = 0; i < operators.size(); i++) { // loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        if (activity.getActivityId().equals(activityId)) { // check if the activity id matches
+          String activityName = activity.getActivityName(); // get the activity name
+          MessageCli.REVIEW_ADDED.printMessage("Public review", activityId, activityName);
+          return; // Exit after adding the review
+        }
+      }
+    }
+    // If no matching activity is found
+    MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
   }
 
   public void addPrivateReview(String activityId, String[] options) {
