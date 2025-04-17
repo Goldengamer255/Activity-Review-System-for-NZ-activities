@@ -591,7 +591,34 @@ public class OperatorManagementSystem {
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
   public void uploadReviewImage(String reviewId, String imageName) {
-    // TODO implement
+    for (int i = 0; i < operators.size(); i++) { // Loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        for (int k = 0; k < activity.getReviews().size(); k++) { // Loop through the reviews
+          Review review = activity.getReviews().get(k);
+          if (review.getReviewId().equals(reviewId)) { // Check if the review ID matches
+            if (review instanceof ExpertReview) { // Check if it's an expert review
+              ExpertReview expertReview = (ExpertReview) review;
+
+              // Add the image to the expert review
+              expertReview.addImage(imageName);
+
+              // Print success message
+              MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
+              return;
+            } else {
+              // If the review is not an expert review
+              MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // If no matching review is found
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
