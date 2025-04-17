@@ -22,7 +22,7 @@ public class PrivateReview extends Review {
   }
 
   public String getEmail() {
-    return email; // Return the email
+    return email;
   }
 
   public String getOperatorResponse() {
@@ -34,18 +34,18 @@ public class PrivateReview extends Review {
   }
 
   @Override
-  public void printReviewDetails() {
+  public void printReviewDetails() { // Print details specific to PrivateReview
     System.out.println("Private Review by " + getReviewerName() + ":");
     System.out.println("Email: " + email);
     System.out.println("Rating: " + getRating());
     System.out.println("Comments: " + getReviewText());
     if (followUpRequested) {
-      if (operatorResponse != null) {
+      if (operatorResponse != null) { // If there's a response from the operator
         System.out.println("Operator Response: " + operatorResponse);
-      } else {
+      } else { // If no response yet
         System.out.println("A reply is needed.");
       }
-    } else {
+    } else { // If no follow-up is requested
       System.out.println("This review is resolved.");
     }
   }

@@ -27,12 +27,12 @@ public class ExpertReview extends Review {
   }
 
   @Override
-  public void printReviewDetails() {
+  public void printReviewDetails() { // Print details specific to ExpertReview
     System.out.println("Expert Review by " + getReviewerName() + ":");
     System.out.println("Rating: " + getRating());
     System.out.println("Comments: " + getReviewText());
     System.out.println("Recommendation: " + recommendation);
-    if (!images.isEmpty()) {
+    if (!images.isEmpty()) { // If there are images, print them
       System.out.println("Images: " + images);
     }
   }
