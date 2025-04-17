@@ -15,6 +15,18 @@ public class PublicReview extends Review {
     this.isEndorsed = true;
   }
 
+  public boolean isEndorsed() {
+    return isEndorsed;
+  }
+
+  public void setEndorsed(boolean endorsed) {
+    this.isEndorsed = endorsed;
+  }
+
+  public boolean isAnonymous() {
+    return isAnonymous;
+  }
+
   @Override
   public void printReviewDetails() {
     String name = isAnonymous ? "Anonymous" : getReviewerName();

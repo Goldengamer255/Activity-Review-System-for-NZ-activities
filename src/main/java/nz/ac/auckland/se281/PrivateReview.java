@@ -21,6 +21,18 @@ public class PrivateReview extends Review {
     this.reviewId = reviewId;
   }
 
+  public String getEmail() {
+    return email; // Return the email
+  }
+
+  public String getOperatorResponse() {
+    return operatorResponse;
+  }
+
+  public boolean isFollowUpRequested() {
+    return followUpRequested;
+  }
+
   @Override
   public void printReviewDetails() {
     System.out.println("Private Review by " + getReviewerName() + ":");

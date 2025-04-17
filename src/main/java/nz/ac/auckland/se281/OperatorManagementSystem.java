@@ -463,13 +463,64 @@ public class OperatorManagementSystem {
       for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
         Activity activity = operator.getActivities().get(j);
         if (activity.getActivityId().equals(activityId)) { // check if the activity id matches
-          String activityName = activity.getActivityName(); // get the activity name
+          ArrayList<Review> reviews = activity.getReviews(); // Get the list of reviews
 
-          MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
-          return;
+          if (reviews.isEmpty()) { // Check if there are no reviews
+            MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activity.getActivityName());
+            return;
+          }
+
+          // Print the header with the number of reviews
+          String verb = reviews.size() == 1 ? "is" : "are";
+          String singularOrPlural = reviews.size() == 1 ? "" : "s";
+          MessageCli.REVIEWS_FOUND.printMessage(
+              verb, String.valueOf(reviews.size()), singularOrPlural, activity.getActivityName());
+
+          // Loop through the reviews and display each one
+          for (int k = 0; k < reviews.size(); k++) {
+            Review review = reviews.get(k);
+            String reviewType =
+                review instanceof PublicReview
+                    ? "Public"
+                    : review instanceof PrivateReview ? "Private" : "Expert";
+
+            String reviewerName =
+                review instanceof PublicReview && ((PublicReview) review).isAnonymous()
+                    ? "Anonymous"
+                    : review.getReviewerName();
+
+            MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+                String.valueOf(review.getRating()),
+                "5",
+                reviewType,
+                review.getReviewId(),
+                reviewerName);
+
+            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(review.getReviewText());
+
+            if (review instanceof PublicReview && ((PublicReview) review).isEndorsed()) {
+              MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
+            } else if (review instanceof PrivateReview) {
+              PrivateReview privateReview = (PrivateReview) review;
+              if (privateReview.isFollowUpRequested()) {
+                if (privateReview.getOperatorResponse() != null) {
+                  MessageCli.REVIEW_ENTRY_RESOLVED.printMessage(
+                      privateReview.getOperatorResponse());
+                } else {
+                  MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(privateReview.getEmail());
+                }
+              } else {
+                MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
+              }
+            } else if (review instanceof ExpertReview) {
+              MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
+            }
+          }
+          return; // Exit after displaying all reviews
         }
       }
     }
+    MessageCli.REVIEW_NOT_FOUND.printMessage(activityId);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
