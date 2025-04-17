@@ -17,6 +17,10 @@ public class PrivateReview extends Review {
     this.operatorResponse = response;
   }
 
+  public void setReviewId(String reviewId) {
+    this.reviewId = reviewId;
+  }
+
   @Override
   public void printReviewDetails() {
     System.out.println("Private Review by " + getReviewerName() + ":");

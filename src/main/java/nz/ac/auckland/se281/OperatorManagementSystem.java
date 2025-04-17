@@ -378,19 +378,35 @@ public class OperatorManagementSystem {
     MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void addPrivateReview(String activityId, String[] options) {
     if (activityId == null || activityId.isEmpty()) { // Check if activityId is null or empty
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
+
     for (int i = 0; i < operators.size(); i++) { // loop through the operators
       Operator operator = operators.get(i);
       for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
         Activity activity = operator.getActivities().get(j);
         if (activity.getActivityId().equals(activityId)) { // check if the activity id matches
-          String activityName = activity.getActivityName(); // get the activity name
-          MessageCli.REVIEW_ADDED.printMessage("Private", activityId, activityName);
-          return; // Exit after adding the review
+          String reviewId = activityId + "-R" + (activity.getReviews().size() + 1);
+
+          // Extract review details from options
+          String reviewerName = options[0];
+          String email = options[1];
+          int rating = Integer.parseInt(options[2]);
+          String comments = options[3];
+          boolean followUpRequested = options[4].equalsIgnoreCase("y");
+
+          // Create and add the review
+          PrivateReview privateReview =
+              new PrivateReview(reviewerName, email, rating, comments, followUpRequested);
+          privateReview.setReviewId(reviewId); // Set the review ID
+          activity.addReview(privateReview);
+
+          MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, activity.getActivityName());
+          return;
         }
       }
     }
@@ -398,6 +414,7 @@ public class OperatorManagementSystem {
     MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void addExpertReview(String activityId, String[] options) {
     if (activityId == null || activityId.isEmpty()) {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
