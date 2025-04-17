@@ -526,7 +526,30 @@ public class OperatorManagementSystem {
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
   public void endorseReview(String reviewId) {
-    // TODO implement
+    for (int i = 0; i < operators.size(); i++) { // Loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        for (int k = 0; k < activity.getReviews().size(); k++) { // Loop through the reviews
+          Review review = activity.getReviews().get(k);
+          if (review.getReviewId().equals(reviewId)) { // Check if the review ID matches
+            if (review instanceof PublicReview) { // Check if it's a public review
+              PublicReview publicReview = (PublicReview) review;
+              publicReview.endorse(); // Endorse the review
+              MessageCli.REVIEW_ENDORSED.printMessage(reviewId); // Print success message
+              return;
+            } else {
+              // If the review is not a public review
+              MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // If no matching review is found
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
