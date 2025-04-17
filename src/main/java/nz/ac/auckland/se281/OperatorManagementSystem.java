@@ -343,7 +343,18 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
-    // TODO implement
+    for (int i = 0; i < operators.size(); i++) { // loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        if (activity.getActivityId().equals(activityId)) { // check if the activity id matches
+          String activityName = activity.getActivityName(); // get the activity name
+
+          MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityName);
+          return;
+        }
+      }
+    }
   }
 
   public void endorseReview(String reviewId) {
