@@ -47,14 +47,12 @@ public class OperatorManagementSystem {
 
   private ArrayList<Operator> operators = new ArrayList<>(); // making the main arraylist
 
-  // Do not change the parameters of the constructor
-  public OperatorManagementSystem() {}
-
   public class Activity {
     private String activityId;
     private String activityName;
     private Types.ActivityType activityType;
     private String operatorName;
+    private ArrayList<Review> reviews;
 
     public Activity(
         String activityId,
@@ -65,6 +63,7 @@ public class OperatorManagementSystem {
       this.activityName = activityName;
       this.activityType = activityType;
       this.operatorName = operatorName;
+      this.reviews = new ArrayList<>();
     }
 
     public String getActivityId() {
@@ -83,18 +82,17 @@ public class OperatorManagementSystem {
       return operatorName;
     }
 
-    private ArrayList<Review> reviews = new ArrayList<>();
-
     public ArrayList<Review> getReviews() {
       return reviews;
     }
 
     public void addReview(Review review) {
       this.reviews.add(review);
-      MessageCli.REVIEW_ADDED.printMessage(
-          review.getClass().getSimpleName(), this.activityId, this.activityName);
     }
   }
+
+  // Do not change the parameters of the constructor
+  public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
     keyword = keyword.trim().toLowerCase(); // trimming the keyword and making it lowercase
@@ -406,26 +404,32 @@ public class OperatorManagementSystem {
       return;
     }
 
-    for (Operator operator : operators) {
-      for (Activity activity : operator.getActivities()) {
-        if (activity.getActivityId().equals(activityId)) {
-          // Extract review details from options
+    for (int i = 0; i < operators.size(); i++) { // Loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        if (activity.getActivityId().equals(activityId)) { // Check if the activity ID matches
+          // Generate the review ID based on the size of the reviews list
+          String reviewId = activityId + "-R" + (activity.getReviews().size() + 1);
+
+          // Create a new ExpertReview object
           String reviewerName = options[0];
           int rating = Integer.parseInt(options[1]);
-          String reviewText = options[2];
-          String reviewId = "EXP-" + activityId + "-" + (activity.getReviews().size() + 1);
+          String comments = options[2];
+          String recommendation = options[3];
 
-          // Create and add the review
-          // Review review = new PublicReview(reviewText, rating, reviewerName, reviewId);
-          // activity.addReview(review);
+          ExpertReview expertReview =
+              new ExpertReview(comments, rating, reviewerName, reviewId, recommendation);
 
-          // Print confirmation
-          MessageCli.REVIEW_ADDED.printMessage("Expert", activityId, activity.getActivityName());
+          // Add the review to the activity
+          activity.addReview(expertReview);
+
+          // If no matching activity is found
+          MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, activity.getActivityName());
           return;
         }
       }
     }
-
     // If no matching activity is found
     MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
