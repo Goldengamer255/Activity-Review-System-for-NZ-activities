@@ -82,6 +82,16 @@ public class OperatorManagementSystem {
     public String getOperatorName() {
       return operatorName;
     }
+
+    private ArrayList<Review> reviews = new ArrayList<>();
+
+    public ArrayList<Review> getReviews() {
+      return reviews;
+    }
+
+    public void addReview(Review review) {
+      reviews.add(review);
+    }
   }
 
   public void searchOperators(String keyword) {
@@ -389,7 +399,34 @@ public class OperatorManagementSystem {
   }
 
   public void addExpertReview(String activityId, String[] options) {
-    // TODO implement
+    if (activityId == null || activityId.isEmpty()) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    for (Operator operator : operators) {
+      for (Activity activity : operator.getActivities()) {
+        if (activity.getActivityId().equals(activityId)) {
+          // Extract review details from options
+          String reviewerName = options[0];
+          int rating = Integer.parseInt(options[1]);
+          String reviewText = options[2];
+          String reviewId = "EXP-" + activityId + "-" + (activity.getReviews().size() + 1);
+
+          // Create and add the review
+          // Review review = new PublicReview(reviewText, rating, reviewerName, reviewId);
+          // activity.addReview(review);
+
+          // Print confirmation
+          MessageCli.REVIEW_ADDED.printMessage(
+              "Expert review", activityId, activity.getActivityName());
+          return;
+        }
+      }
+    }
+
+    // If no matching activity is found
+    MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
   public void displayReviews(String activityId) {
