@@ -1,4 +1,4 @@
-import nz.ac.auckland.se281.Review;
+package nz.ac.auckland.se281;
 
 public class PrivateReview extends Review {
   private String email;

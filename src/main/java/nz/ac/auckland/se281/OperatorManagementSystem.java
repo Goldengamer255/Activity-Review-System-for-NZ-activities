@@ -90,7 +90,9 @@ public class OperatorManagementSystem {
     }
 
     public void addReview(Review review) {
-      reviews.add(review);
+      this.reviews.add(review);
+      MessageCli.REVIEW_ADDED.printMessage(
+          review.getClass().getSimpleName(), this.activityId, this.activityName);
     }
   }
 
@@ -389,7 +391,7 @@ public class OperatorManagementSystem {
         Activity activity = operator.getActivities().get(j);
         if (activity.getActivityId().equals(activityId)) { // check if the activity id matches
           String activityName = activity.getActivityName(); // get the activity name
-          MessageCli.REVIEW_ADDED.printMessage("Private review", activityId, activityName);
+          MessageCli.REVIEW_ADDED.printMessage("Private", activityId, activityName);
           return; // Exit after adding the review
         }
       }
@@ -418,8 +420,7 @@ public class OperatorManagementSystem {
           // activity.addReview(review);
 
           // Print confirmation
-          MessageCli.REVIEW_ADDED.printMessage(
-              "Expert review", activityId, activity.getActivityName());
+          MessageCli.REVIEW_ADDED.printMessage("Expert", activityId, activity.getActivityName());
           return;
         }
       }
