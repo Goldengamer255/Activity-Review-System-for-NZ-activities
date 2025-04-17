@@ -555,7 +555,37 @@ public class OperatorManagementSystem {
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
   public void resolveReview(String reviewId, String response) {
-    // TODO implement
+    for (int i = 0; i < operators.size(); i++) { // Loop through the operators
+      Operator operator = operators.get(i);
+      for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
+        Activity activity = operator.getActivities().get(j);
+        for (int k = 0; k < activity.getReviews().size(); k++) { // Loop through the reviews
+          Review review = activity.getReviews().get(k);
+          if (review.getReviewId().equals(reviewId)) { // Check if the review ID matches
+            if (review instanceof PrivateReview) { // Check if it's a private review
+              PrivateReview privateReview = (PrivateReview) review;
+
+              if (privateReview.isFollowUpRequested()) { // Ensure follow-up was requested
+                privateReview.respond(response); // Resolve the review with the response
+                MessageCli.REVIEW_RESOLVED.printMessage(reviewId); // Print success message
+                return;
+              } else {
+                // If follow-up was not requested, resolving is not allowed
+                MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
+                return;
+              }
+            } else {
+              // If the review is not a private review
+              MessageCli.REVIEW_NOT_RESOLVED.printMessage(reviewId);
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    // If no matching review is found
+    MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
