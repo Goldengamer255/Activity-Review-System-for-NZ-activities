@@ -513,14 +513,19 @@ public class OperatorManagementSystem {
                 MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
               }
             } else if (review instanceof ExpertReview) {
+              ExpertReview expertReview = (ExpertReview) review;
               MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
+              if (!expertReview.getImages().isEmpty()) {
+                String images = String.join(",", expertReview.getImages());
+                MessageCli.REVIEW_ENTRY_IMAGES.printMessage(images);
+              }
             }
+            return; // Exit after displaying all reviews
           }
-          return; // Exit after displaying all reviews
         }
       }
+      MessageCli.REVIEW_NOT_FOUND.printMessage(activityId);
     }
-    MessageCli.REVIEW_NOT_FOUND.printMessage(activityId);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------------------------------------
