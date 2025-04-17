@@ -342,6 +342,7 @@ public class OperatorManagementSystem {
   }
 
   public void addPublicReview(String activityId, String[] options) {
+    activityId = activityId.toUpperCase(); // Convert activityId to uppercase for consistency
     if (activityId == null || activityId.isEmpty()) { // Check if activityId is null or empty
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
@@ -368,8 +369,7 @@ public class OperatorManagementSystem {
           activity.addReview(publicReview);
 
           // Print confirmation message
-          MessageCli.REVIEW_ADDED.printMessage(
-              "Public review", reviewId, activity.getActivityName());
+          MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, activity.getActivityName());
           return; // Exit after successfully adding the review
         }
       }
@@ -379,6 +379,7 @@ public class OperatorManagementSystem {
   }
 
   public void addPrivateReview(String activityId, String[] options) {
+    activityId = activityId.toUpperCase(); // Convert activityId to uppercase for consistency
     if (activityId == null || activityId.isEmpty()) { // Check if activityId is null or empty
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
@@ -414,6 +415,7 @@ public class OperatorManagementSystem {
   }
 
   public void addExpertReview(String activityId, String[] options) {
+    activityId = activityId.toUpperCase(); // Convert activityId to uppercase for consistency
     if (activityId == null || activityId.isEmpty()) {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
@@ -450,6 +452,11 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
+    activityId = activityId.toUpperCase(); // Convert activityId to uppercase for consistency
+    if (activityId == null || activityId.isEmpty()) { // Check if activityId is null or empty
+      MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
+      return;
+    }
     for (int i = 0; i < operators.size(); i++) { // loop through the operators
       Operator operator = operators.get(i);
       for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
@@ -506,7 +513,9 @@ public class OperatorManagementSystem {
               }
             } else if (review instanceof ExpertReview) {
               ExpertReview expertReview = (ExpertReview) review;
-              MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
+              if (expertReview.getRecommendation().equalsIgnoreCase("y")) {
+                MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
+              }
               if (!expertReview.getImages().isEmpty()) {
                 String images = String.join(",", expertReview.getImages());
                 MessageCli.REVIEW_ENTRY_IMAGES.printMessage(images);
@@ -516,7 +525,7 @@ public class OperatorManagementSystem {
           return; // Exit after displaying all reviews
         }
       }
-      MessageCli.REVIEW_NOT_FOUND.printMessage(activityId);
+      MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
     }
   }
 
