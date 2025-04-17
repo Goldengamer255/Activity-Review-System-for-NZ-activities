@@ -94,6 +94,7 @@ public class OperatorManagementSystem {
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void searchOperators(String keyword) {
     keyword = keyword.trim().toLowerCase(); // trimming the keyword and making it lowercase
 
@@ -137,6 +138,7 @@ public class OperatorManagementSystem {
     }
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void createOperator(String operatorName, String location) {
     String nameCheck = "";
     nameCheck = operatorName.replaceAll("\\s", "");
@@ -215,6 +217,7 @@ public class OperatorManagementSystem {
             locationAsString)); // adds operator to array
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void viewActivities(String operatorId) {
     if (operatorId == null || operatorId.isEmpty()) {
       MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
@@ -252,6 +255,7 @@ public class OperatorManagementSystem {
     MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void createActivity(String activityName, String activityType, String operatorId) {
     if (operatorId == null || operatorId.isEmpty()) { // Check if operatorId is null or empty
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
@@ -295,6 +299,7 @@ public class OperatorManagementSystem {
         operatorId); // If operator not found
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void searchActivities(String keyword) {
     if (keyword == null || keyword.trim().isEmpty()) { // Check if keyword is null or empty
       MessageCli.ACTIVITY_NOT_FOUND.printMessage(keyword);
@@ -340,6 +345,7 @@ public class OperatorManagementSystem {
     }
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void addPublicReview(String activityId, String[] options) {
     if (activityId == null || activityId.isEmpty()) { // Check if activityId is null or empty
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
@@ -350,27 +356,26 @@ public class OperatorManagementSystem {
       Operator operator = operators.get(i);
       for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
         Activity activity = operator.getActivities().get(j);
-        try {
-          Types.ActivityType activityType = activity.getActivityType(); // get the activity type
-          if (activityType == null) { // check if the activity type is null
-            throw new NullPointerException("Activity type is null");
-          }
-        } catch (NullPointerException e) {
-          // Handle the case where activity type is null
-          MessageCli.ACTIVITY_NOT_FOUND.printMessage(activityId);
-          return;
-        }
-      }
-    }
+        if (activity.getActivityId().equals(activityId)) { // Check if the activity ID matches
+          // Generate the review ID based on the size of the reviews list
+          String reviewId = activityId + "-R" + (activity.getReviews().size() + 1);
 
-    for (int i = 0; i < operators.size(); i++) { // loop through the operators
-      Operator operator = operators.get(i);
-      for (int j = 0; j < operator.getActivities().size(); j++) { // loop through the activities
-        Activity activity = operator.getActivities().get(j);
-        if (activity.getActivityId().equals(activityId)) { // check if the activity id matches
-          String activityName = activity.getActivityName(); // get the activity name
-          MessageCli.REVIEW_ADDED.printMessage("Public review", activityId, activityName);
-          return; // Exit after adding the review
+          // Create a new PublicReview object
+          String reviewerName = options[0];
+          int rating = Integer.parseInt(options[2]);
+          String comments = options[3];
+          boolean isAnonymous = options[1].equalsIgnoreCase("y");
+
+          PublicReview publicReview =
+              new PublicReview(comments, rating, reviewerName, reviewId, isAnonymous);
+
+          // Add the review to the activity
+          activity.addReview(publicReview);
+
+          // Print confirmation message
+          MessageCli.REVIEW_ADDED.printMessage(
+              "Public review", reviewId, activity.getActivityName());
+          return; // Exit after successfully adding the review
         }
       }
     }
@@ -451,6 +456,7 @@ public class OperatorManagementSystem {
     MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
   public void displayReviews(String activityId) {
     for (int i = 0; i < operators.size(); i++) { // loop through the operators
       Operator operator = operators.get(i);
@@ -466,17 +472,25 @@ public class OperatorManagementSystem {
     }
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
   public void endorseReview(String reviewId) {
     // TODO implement
   }
+
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
   public void resolveReview(String reviewId, String response) {
     // TODO implement
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
   public void uploadReviewImage(String reviewId, String imageName) {
     // TODO implement
   }
+
+  // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
   public void displayTopActivities() {
     // TODO implement
