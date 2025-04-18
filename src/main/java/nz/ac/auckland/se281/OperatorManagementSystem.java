@@ -533,6 +533,11 @@ public class OperatorManagementSystem {
   }
 
   public void endorseReview(String reviewId) {
+    reviewId = reviewId.toUpperCase(); // Convert reviewId to uppercase for consistency
+    if (reviewId == null || reviewId.isEmpty()) { // Check if reviewId is null or empty
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
     for (int i = 0; i < operators.size(); i++) { // Loop through the operators
       Operator operator = operators.get(i);
       for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
@@ -560,6 +565,11 @@ public class OperatorManagementSystem {
   }
 
   public void resolveReview(String reviewId, String response) {
+    reviewId = reviewId.toUpperCase(); // Convert reviewId to uppercase for consistency
+    if (reviewId == null || reviewId.isEmpty()) { // Check if reviewId is null or empty
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
     for (int i = 0; i < operators.size(); i++) { // Loop through the operators
       Operator operator = operators.get(i);
       for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
@@ -594,6 +604,11 @@ public class OperatorManagementSystem {
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
+    reviewId = reviewId.toUpperCase(); // Convert reviewId to uppercase for consistency
+    if (reviewId == null || reviewId.isEmpty()) { // Check if reviewId is null or empty
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
     for (int i = 0; i < operators.size(); i++) { // Loop through the operators
       Operator operator = operators.get(i);
       for (int j = 0; j < operator.getActivities().size(); j++) { // Loop through the activities
@@ -625,11 +640,10 @@ public class OperatorManagementSystem {
   }
 
   public void displayTopActivities() {
-    Activity topActivity = null;
-    double highestAverageRating = 0.0;
-
     for (Types.Location location : Types.Location.values()) { // Loop through all locations
       String locationName = location.getFullName();
+      Activity topActivity = null; // Reset for each location
+      double highestAverageRating = 0.0; // Reset for each location
 
       for (Operator operator : operators) { // Loop through operators
         if (operator
