@@ -359,6 +359,7 @@ public class OperatorManagementSystem {
           // Create a new PublicReview object
           String reviewerName = options[0];
           int rating = Integer.parseInt(options[2]);
+          rating = Math.max(1, Math.min(5, rating)); // Adjust rating to be between 1 and 5
           String comments = options[3];
           boolean isAnonymous = options[1].equalsIgnoreCase("y");
 
@@ -396,6 +397,7 @@ public class OperatorManagementSystem {
           String reviewerName = options[0];
           String email = options[1];
           int rating = Integer.parseInt(options[2]);
+          rating = Math.max(1, Math.min(5, rating)); // Adjust rating to be between 1 and 5
           String comments = options[3];
           boolean followUpRequested = options[4].equalsIgnoreCase("y");
 
@@ -432,6 +434,7 @@ public class OperatorManagementSystem {
           // Create a new ExpertReview object
           String reviewerName = options[0];
           int rating = Integer.parseInt(options[1]);
+          rating = Math.max(1, Math.min(5, rating)); // Adjust rating to be between 1 and 5
           String comments = options[2];
           String recommendation = options[3];
 
